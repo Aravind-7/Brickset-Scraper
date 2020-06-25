@@ -1,13 +1,13 @@
 import scrapy
-from scrapy.crawler import CrawlerProcess
+# from scrapy.crawler import CrawlerProcess
 
 class NewBrickSet(scrapy.Spider):
     name = "New_BrickSetSpider"
-    start_urls = ['https://brickset.com/sets/year-2020/category-Normal/page-1']
+    start_urls = ['https://brickset.com/sets/year-1983/category-Normal/page-3']
 
     custom_settings = {
         'FEED_FORMAT': 'xml',
-        'FEED_URI': 'page.xml'
+        'FEED_URI': 'ta.xml'
     }
 
     def parse(self, response):
@@ -41,7 +41,7 @@ class NewBrickSet(scrapy.Spider):
                 'buy_at4': bricks.xpath(BUYAT4_SELECTOR).extract_first()
             }
 
-# run spider
-process = CrawlerProcess()
-process.crawl(NewBrickSet)
-process.start()
+
+# process = CrawlerProcess()
+# process.crawl(NewBrickSet)
+# process.start()
