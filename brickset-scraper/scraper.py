@@ -4,6 +4,11 @@ class BrickSetSpider(scrapy.Spider):
     name = "BrickSpider"
     start_urls = ['https://brickset.com/sets/year-1985']
 
+    custom_settings = {
+        'FEED_FORMAT': 'xml',
+        'FEED_URI': 'te.xml'
+    }
+
     def parse(self, response):
         SET_SELECTOR = '.set'
         for bricks in response.css(SET_SELECTOR):

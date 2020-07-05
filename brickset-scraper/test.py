@@ -3,14 +3,15 @@ import scrapy
 
 class NewBrickSet(scrapy.Spider):
     name = "New_BrickSetSpider"
-    start_urls = ['https://brickset.com/sets/year-1983/category-Normal/page-3']
+    start_urls = ['https://brickset.com/sets/year-1983/category-Normal/page-1']
 
     custom_settings = {
         'FEED_FORMAT': 'xml',
-        'FEED_URI': 't1.xml'
+        'FEED_URI': 'test1.xml'
     }
 
     def parse(self, response):
+
         SET_SELECTOR = '.set'
         for bricks in response.css(SET_SELECTOR):
 
@@ -41,7 +42,17 @@ class NewBrickSet(scrapy.Spider):
                 'buy_at4': bricks.xpath(BUYAT4_SELECTOR).extract_first()
             }
 
+        # page = response.url.split("/")[-3]
+        # filename = 'page-%s.xml' % page
+        # with open(filename, 'wb') as f:
+        #     f.write(response.body)
+        # self.log('Saved file %s' %filename)
 
-# process = CrawlerProcess()
-# process.crawl(NewBrickSet)
-# process.start()
+        NEXT_PAGE_SELECTOR = '.next a ::attr(href)'
+        next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
+        if next_page:
+            yield scrapy.Request(
+                response.urljoin(next_page),
+                callback=self.parse
+
+            )
